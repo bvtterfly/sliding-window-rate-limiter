@@ -155,23 +155,24 @@ public function retriesLeft(string $key, int $maxAttempts, int $decay = 60): int
 
 ## Route Rate Limiting
 
-Package designed to rate limit actions in a seconds-based system, so it needs its rate limiters classes and lets you configure rate limiters for less than a minute. Still, for ease of usage of this package, It supports default Laravel's Rate Limiters.
 
-This package comes with a `throttle` middleware for Route Rate Limiting, which acts as default `throttle` middleware.
-This middleware tries to get a named rate limiter from the `SlidingWindowRateLimiter` or, as a fallback, it will take them from Laravel RateLimiter.
+This package comes with a `throttle` middleware for Route Rate Limiting. It can replace the default Laravel's `throttle` middleware to use this package rate limiter. The only difference is it tries to get a named rate limiter from the `SlidingWindowRateLimiter` or, as a fallback, it will take them from Laravel RateLimiter.
 
 You may wish to change the mapping of `throttle` middleware in your application's HTTP kernel(`App\Http\Kernel`) to use `\Bvtterfly\SlidingWindowRateLimiter\Http\Middleware\ThrottleRequests` class.
+
+Rate Limiters must be configured for route rate-limiting to work. Laravel Rate Limiter comes with a RateLimiting class(`Illuminate\Cache\RateLimiting\Limit`) that works in a minutes-based system. But This package is designed to allow rate limit actions in a seconds-based system, so it comes with its rate limiters classes and lets you configure rate limiters for less than a minute. Still, for ease of usage of this package, It supports default Laravel's Rate Limiters.
+
 
 ## Defining Rate Limiters
 
 > `SlidingWindowRateLimiter` rate limiters are heavily based on Laravel's rate limiters. It only differs in the fact that it is seconds-based. So, before getting started, be sure to read about them on [Laravel docs](https://laravel.com/docs/routing#defining-rate-limiters).
 
-Limit configurations are instances of the `Bvtterfly\SlidingWindowRateLimiter\Limit` class, and It contains helpful "builder" methods to define your rate limits quickly. The rate limiter name may be any string you wish.
+Limit configurations are instances of the `Bvtterfly\SlidingWindowRateLimiter\RateLimiting\Limit` class, and It contains helpful "builder" methods to define your rate limits quickly. The rate limiter name may be any string you wish.
 
 For limiting to 500 requests in 45 seconds:
 
 ```php
-use Bvtterfly\SlidingWindowRateLimiter\Limit;
+use Bvtterfly\SlidingWindowRateLimiter\RateLimiting\Limit;
 use Bvtterfly\SlidingWindowRateLimiter\Facades\SlidingWindowRateLimiter;
  
 /**
